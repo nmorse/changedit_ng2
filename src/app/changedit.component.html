@@ -1,3 +1,48 @@
-<h1>
-  {{title}}
-</h1>
+<div class="container content">
+  <div class="row">
+    <div class="col s12">
+      <span style="font-size:50px;"> <i style="color:blue;">chang<b>ed</b></i><b>it</b> </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s3">
+      <button class="btn waves-effect waves-light" (click)="init()" *ngIf="state.hasTransition('init')"> init </button>
+    </div>
+    <div class="col s3">
+      <button class="btn waves-effect waves-light" (click)="state.signal('edit')" *ngIf="state.hasTransition('edit')"> edit </button>
+      <button class="btn waves-effect waves-light" (click)="accept()" *ngIf="state.hasTransition('accept')"> accept </button>
+    </div>
+    <div class="col s3">
+      <button class="btn waves-effect waves-light" (click)="state.signal('remove')" *ngIf="state.hasTransition('remove')"> remove </button>
+      <button class="btn waves-effect waves-light" (click)="revert()" *ngIf="state.hasTransition('revert')"> revert </button>
+    </div>
+  </div>
+  <div class="row">
+    <div *ngIf="state.getCurrentStateName() == 'changed'" class="col s12">
+      <span> The original content was: "{{original_item}}" and will be changed to: </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s2">
+      item Id:<br/>
+      {{item_id}}
+    </div>
+    <div *ngIf="state.currently('editing')" class="col s10">
+      <input style="font-size:40px;" type="text" [(ngModel)]="new_item" />
+    </div>
+    <div *ngIf="!state.currently('editing')" class="col s10">
+      <span [class]="state.getCurrentStateName()"> {{new_item}} </span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s8">
+      <h5>
+        Current State: {{state.getCurrentStateName()}}
+      </h5>
+    </div>
+    <div class="col s4">
+      <button class="btn waves-effect waves-light"  *ngIf="state.currently('changed') || state.currently('to-be-removed')">
+        submit item {{item_id}} </button>
+    </div>
+  </div>
+</div>

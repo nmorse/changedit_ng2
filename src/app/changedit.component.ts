@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {FSM} from './fsm';
 
 @Component({
   moduleId: module.id,
@@ -7,5 +8,31 @@ import { Component } from '@angular/core';
   styleUrls: ['changedit.component.css']
 })
 export class ChangeditAppComponent {
-  title = 'changedit works!';
+  title = 'changedit';
+  item_id: string = " loading... ";
+  original_item: string = "";
+  new_item: string = "";
+  state = this.initState();
+
+  initState() {
+    return new FSM(
+      {"states":{"Start":{},"clean":{},"editing":{},"changed":{},"to-be-removed":{}},"trans":{"Start":{"init":{"clean":true}},"clean":{"edit":{"editing":true},"remove":{"to-be-removed":true}},"editing":{"revert":{"clean":true},"accept":{"changed":true,"clean":function () { return (this.original_item == this.new_item);}}},"changed":{"revert":{"clean":true},"edit":{"editing":true}},"to-be-removed":{"revert":{"clean":true}}},"current_state_name":"Start","views":[{"name":"primary","nodes":{}},{"name":"kitty corner","nodes":{"Start":{"position":{"x":300,"y":70},"width":60}}}]}
+      , {"logging": true}
+    );
+  }
+
+  init () {
+    this.state.signal('init', this);
+    this.item_id = '23';
+    this.new_item = this.original_item = "I think we all can agree.";
+  }
+
+  revert () {
+    this.state.signal('revert', this);
+    this.new_item = this.original_item;
+  }
+  accept () {
+    this.state.signal('accept', this);
+  }
+
 }
