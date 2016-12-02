@@ -31,7 +31,8 @@
       <input style="font-size:40px;" type="text" [(ngModel)]="new_item" />
     </div>
     <div *ngIf="!state.currently('editing')" class="col s10">
-      <span [class]="state.getCurrentStateName()"> {{new_item}} </span>
+      <!-- span [class]="state.getCurrentStateName()"> {{new_item}} </span -->
+      <span [innerHTML]="diff_display"></span>
     </div>
   </div>
   <div class="row">

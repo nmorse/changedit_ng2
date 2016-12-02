@@ -41,12 +41,17 @@ export class FSM {
         }
       }
       if (!guarded_next_state && default_next_state) {
-        if (this.logging) { console.log('on signal:'+requested_transition+', transitioning to state:' + default_next_state + ' (unguarded)'); }
+        if (this.logging) { console.log('on signal: '+requested_transition+', transitioning to state: ' + default_next_state + ' (unguarded)'); }
         this.current_state = default_next_state;
+        let stateObj = this.fsa['states'][this.current_state];
+        if (stateObj.onEnterState) {
+          let retVal = stateObj.onEnterState.call(env);
+          if (this.logging) { console.log('onEnterState was called and returned:'); console.log(retVal); }
+        }
         return this.current_state;
       }
       else if (guarded_next_state) {
-        if (this.logging) { console.log('on signal:'+requested_transition+', transitioning to state:' + guarded_next_state + ' (guarded)'); }
+        if (this.logging) { console.log('on signal: '+requested_transition+', transitioning to state: ' + guarded_next_state + ' (guarded)'); }
         this.current_state = guarded_next_state;
         return this.current_state;
       }
