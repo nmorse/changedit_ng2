@@ -1,9 +1,11 @@
-del {
-  background: #FFE6E6;
+:host >>> span.remove {
+    text-decoration: line-through;
+    background-color: #FDE4E4;
 }
 
-ins {
-  background: #E6FFE6;
+:host >>> span.insert {
+  text-decoration: underline;
+  background-color: #E4FDE4;
 }
 
 .clean {

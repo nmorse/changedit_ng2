@@ -5,16 +5,16 @@ export class TextDiff {
     o = o.replace(/\s+$/, '');
     n = n.replace(/\s+$/, '');
 
-    var out = this.diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
-    var str = "";
+    let out = this.diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+    let str = "";
 
-    var oSpace = o.match(/\s+/g);
+    let oSpace = o.match(/\s+/g);
     if (oSpace == null) {
       oSpace = ["\n"];
     } else {
       oSpace.push("\n");
     }
-    var nSpace = n.match(/\s+/g);
+    let nSpace = n.match(/\s+/g);
     if (nSpace == null) {
       nSpace = ["\n"];
     } else {
@@ -22,24 +22,24 @@ export class TextDiff {
     }
 
     if (out.n.length == 0) {
-        for (var i = 0; i < out.o.length; i++) {
-          str += '<del>' + this.escape(out.o[i]) + oSpace[i] + "</del>";
+        for (let i = 0; i < out.o.length; i++) {
+          str += '<span class="remove">' + this.escape(out.o[i]) + oSpace[i] + "</span>";
         }
     } else {
       if (out.n[0].text == null) {
         for (n = 0; n < out.o.length && out.o[n].text == null; n++) {
-          str += '<del>' + this.escape(out.o[n]) + oSpace[n] + "</del>";
+          str += '<span class="remove">' + this.escape(out.o[n]) + oSpace[n] + "</span>";
         }
       }
 
-      for ( var i = 0; i < out.n.length; i++ ) {
+      for ( let i = 0; i < out.n.length; i++ ) {
         if (out.n[i].text == null) {
-          str += '<ins>' + this.escape(out.n[i]) + nSpace[i] + "</ins>";
+          str += '<span class="insert">' + this.escape(out.n[i]) + nSpace[i] + "</span>";
         } else {
-          var pre = "";
+          let pre = "";
 
           for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-            pre += '<del>' + this.escape(out.o[n]) + oSpace[n] + "</del>";
+            pre += '<span class="remove">' + this.escape(out.o[n]) + oSpace[n] + "</span>";
           }
           str += " " + out.n[i].text + nSpace[i] + pre;
         }
@@ -100,57 +100,5 @@ export class TextDiff {
 
       return n;
   }
-
-  randomColor() {
-      return "rgb(" + (Math.random() * 100) + "%, " +
-                      (Math.random() * 100) + "%, " +
-                      (Math.random() * 100) + "%)";
-  }
-
-  diffString2( o, n ) {
-    o = o.replace(/\s+$/, '');
-    n = n.replace(/\s+$/, '');
-
-    var out = this.diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
-
-    var oSpace = o.match(/\s+/g);
-    if (oSpace == null) {
-      oSpace = ["\n"];
-    } else {
-      oSpace.push("\n");
-    }
-    var nSpace = n.match(/\s+/g);
-    if (nSpace == null) {
-      nSpace = ["\n"];
-    } else {
-      nSpace.push("\n");
-    }
-
-    var os = "";
-    var colors = new Array();
-    for (var i = 0; i < out.o.length; i++) {
-        colors[i] = this.randomColor();
-
-        if (out.o[i].text != null) {
-            os += '<span style="background-color: ' +colors[i]+ '">' +
-                  this.escape(out.o[i].text) + oSpace[i] + "</span>";
-        } else {
-            os += "<del>" + this.escape(out.o[i]) + oSpace[i] + "</del>";
-        }
-    }
-
-    var ns = "";
-    for (var i = 0; i < out.n.length; i++) {
-        if (out.n[i].text != null) {
-            ns += '<span style="background-color: ' +colors[out.n[i].row]+ '">' +
-                  this.escape(out.n[i].text) + nSpace[i] + "</span>";
-        } else {
-            ns += "<ins>" + this.escape(out.n[i]) + nSpace[i] + "</ins>";
-        }
-    }
-
-    return { o : os , n : ns };
-  }
-
 
 }
