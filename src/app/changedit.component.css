@@ -11,17 +11,14 @@
 .clean {
   text-decoration: none;
   color: darkgreen;
-  font-size: 40px;
 }
 .changed {
   text-decoration: underline;
   color: darkblue;
-  font-size: 40px;
 }
 .to-be-removed {
   text-decoration: line-through;
   color: darkred;
-  font-size: 40px;
 }
 
 

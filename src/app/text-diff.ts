@@ -23,25 +23,29 @@ export class TextDiff {
 
     if (out.n.length == 0) {
         for (let i = 0; i < out.o.length; i++) {
-          str += '<span class="remove">' + this.escape(out.o[i]) + oSpace[i] + "</span>";
+          str += '<span class="remove">' + this.escape(out.o[i]) + "</span>" + oSpace[i];
         }
     } else {
       if (out.n[0].text == null) {
         for (n = 0; n < out.o.length && out.o[n].text == null; n++) {
-          str += '<span class="remove">' + this.escape(out.o[n]) + oSpace[n] + "</span>";
+          str += '<span class="remove">' + this.escape(out.o[n]) + "</span>" + oSpace[n];
         }
       }
 
       for ( let i = 0; i < out.n.length; i++ ) {
-        if (out.n[i].text == null) {
-          str += '<span class="insert">' + this.escape(out.n[i]) + nSpace[i] + "</span>";
+        let o_n = out.n[i];
+        let text = (typeof o_n === 'string')? o_n: o_n.text;
+        if (o_n.text == null || o_n.row > i) {
+          str += '<span class="insert">' + this.escape(text) + "</span>" + nSpace[i];
         } else {
           let pre = "";
 
-          for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
-            pre += '<span class="remove">' + this.escape(out.o[n]) + oSpace[n] + "</span>";
+          for (n = o_n.row + 1; n < out.o.length && (out.o[n].text == null || out.o[n].row < i); n++ ) {
+            let o_o = out.o[n];
+            let text = (typeof o_o === 'string')? o_o: o_o.text;
+            pre += '<span class="remove">' + this.escape(text) + "</span>" + oSpace[n];
           }
-          str += " " + out.n[i].text + nSpace[i] + pre;
+          str += " " + o_n.text + nSpace[i] + pre;
         }
       }
     }
@@ -93,11 +97,15 @@ export class TextDiff {
 
   escape(s) {
       var n = s;
-      n = n.replace(/&/g, "&amp;");
-      n = n.replace(/</g, "&lt;");
-      n = n.replace(/>/g, "&gt;");
-      n = n.replace(/"/g, "&quot;");
-
+      if (n) {
+        n = n.replace(/&/g, "&amp;");
+        n = n.replace(/</g, "&lt;");
+        n = n.replace(/>/g, "&gt;");
+        n = n.replace(/"/g, "&quot;");
+      }
+      else {
+        alert("got " + n);
+      }
       return n;
   }
 

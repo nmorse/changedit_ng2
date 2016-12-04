@@ -19,7 +19,10 @@
   </div>
   <div class="row">
     <div *ngIf="state.getCurrentStateName() == 'changed'" class="col s12">
-      <span> The original content was: "{{original_item}}" and will be changed to: </span>
+      The original content was:
+      <div class="clean">{{original_item}}</div>
+      and will be changed to: 
+      <div class="changed">{{new_item}}"</div>
     </div>
   </div>
   <div class="row">
@@ -31,7 +34,6 @@
       <input style="font-size:40px;" type="text" [(ngModel)]="new_item" />
     </div>
     <div *ngIf="!state.currently('editing')" class="col s10">
-      <!-- span [class]="state.getCurrentStateName()"> {{new_item}} </span -->
       <span [innerHTML]="diff_display"></span>
     </div>
   </div>
