@@ -17,6 +17,6 @@ describe('App: Changedit', () => {
 
   it('should have as title \'changedit works!\'',
       inject([ChangeditAppComponent], (app: ChangeditAppComponent) => {
-    expect(app.title).toEqual('changedit works!');
+    expect(app.title).toEqual('changedit');
   }));
 });
