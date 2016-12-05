@@ -11,8 +11,8 @@ import {TextDiff} from './text-diff';
 export class ChangeditAppComponent {
   title = 'changedit';
   item_id: string = " loading... ";
-  original_item: string = "";
-  new_item: string = "";
+  original_content: string = "";
+  changed_content: string = "";
   diff_display: string = "";
   state = this.initState();
   diffEngine = new TextDiff();
@@ -22,10 +22,10 @@ export class ChangeditAppComponent {
       {"states":{"Start":{},"clean":{},"editing":{},
         "changed":{
           onEnterState: function() {
-            return this.diff_display = this.diffEngine.diffString(this.original_item, this.new_item);
+            return this.diff_display = this.diffEngine.diffString(this.original_content, this.changed_content);
           }
         },"to-be-removed":{}},
-       "trans":{"Start":{"init":{"clean":true}},"clean":{"edit":{"editing":true},"remove":{"to-be-removed":true}},"editing":{"revert":{"clean":true},"accept":{"changed":true,"clean":function () { return (this.original_item == this.new_item);}}},"changed":{"revert":{"clean":true},"edit":{"editing":true}},"to-be-removed":{"revert":{"clean":true}}},"current_state_name":"Start","views":[{"name":"primary","nodes":{}},{"name":"kitty corner","nodes":{"Start":{"position":{"x":300,"y":70},"width":60}}}]
+       "trans":{"Start":{"init":{"clean":true}},"clean":{"edit":{"editing":true},"remove":{"to-be-removed":true}},"editing":{"revert":{"clean":true},"accept":{"changed":true,"clean":function () { return (this.original_content == this.changed_content);}}},"changed":{"revert":{"clean":true},"edit":{"editing":true}},"to-be-removed":{"revert":{"clean":true}}},"current_state_name":"Start","views":[{"name":"primary","nodes":{}},{"name":"kitty corner","nodes":{"Start":{"position":{"x":300,"y":70},"width":60}}}]
       }
       , {"logging": true}
     );
@@ -35,12 +35,12 @@ export class ChangeditAppComponent {
     this.state.signal('init', this);
     // mock the loading of a record into the UI
     this.item_id = '23';
-    this.diff_display = this.new_item = this.original_item = "I think we all can agree.";
+    this.diff_display = this.changed_content = this.original_content = "I think we all can agree.";
   }
 
   revert () {
     this.state.signal('revert', this);
-    this.diff_display = this.new_item = this.original_item;
+    this.diff_display = this.changed_content = this.original_content;
   }
 
   accept () {
