@@ -1,5 +1,78 @@
 export class TextDiff {
+  // Difference markup (at word granularity)
+  diff2(a: string, b: string) {
+    //
+    let a_arr = a.split(' ');
+    let b_arr = b.split(' ');
+    let res_arr: any = [];
+    let res : string = '';
+    let sep : string = '';
+    res_arr = this.diff_aux(res_arr, a_arr, b_arr);
+    //<span class="diffwow-add">wow</span>
+    for(let r of res_arr) {
+      if (r.markup === '') {
+        res += sep + r.text;
+      }
+      else {
+        res += sep + '<span class="diffwow-' + r.markup + '">' + r.text + '</span>';
+      }
+      sep = ' ';
+    }
+    return res;
+  }
 
+  diff_aux (r, a, b) {
+    if (a.length >= 1 && b.length == 0) {
+      r.push({text:a[0], markup:"remove"});
+      a = a.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+    if (a.length == 0 && b.length >= 1 ) {
+      r.push({text:b[0], markup:"add"});
+      b = b.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+    if (a.length == 0 && b.length == 0 ) {
+      return r;
+    }
+    if (a[0] == b[0]) {
+      r.push({text:a[0], markup:""});
+      a = a.slice(1);
+      b = b.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+    else if(this.is_found_in(b[0], a)) {
+      r.push({text:a[0], markup:"remove"});
+      a = a.slice(1);
+      //b = b.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+    else if(this.is_found_in(a[0], b)) {
+      r.push({text:b[0], markup:"add"});
+      b = b.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+    else {
+      r.push({text:a[0], markup:"remove"});
+      r.push({text:b[0], markup:"add"});
+      a = a.slice(1);
+      b = b.slice(1);
+      return this.diff_aux(r, a, b);
+    }
+  }
+
+  is_found_in(a: string, b_arr, distance:number = 8): boolean {
+    for(let b of b_arr) {
+      distance -= 1;
+      if (distance === 0) {
+        return false;
+      }
+      if (a == b) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   diffString( o, n ) {
     o = o.replace(/\s+$/, '');
