@@ -11,7 +11,7 @@ describe('TextDiff', () => {
   it('should create an instance', () => {
     expect(new TextDiff()).toBeTruthy();
   });
-///*
+/*
   it(" diff2 should mark up 'hi there', 'hi wow there'",
       () => {
     let td = new TextDiff();
@@ -30,8 +30,7 @@ describe('TextDiff', () => {
     let markup = td.diff2('hi wow', 'hi wow there')
     expect(markup).toEqual('hi wow <span class="diffwow-add">there</span>');
   });
-//*/
-///*
+
   it(" diff2 should mark up 'hi wow there', 'hi there'",
       () => {
     let td = new TextDiff();
@@ -50,7 +49,7 @@ describe('TextDiff', () => {
     let markup = td.diff2('hi wow there', 'hi wow')
     expect(markup).toEqual('hi wow <span class="diffwow-remove">there</span>');
   });
-//*/
+
   it(" diff2 should mark up 'hi wow there', 'hi there'",
       () => {
     let td = new TextDiff();
@@ -95,5 +94,19 @@ describe('TextDiff', () => {
     expect(markup).toEqual('It has <span class="diffwow-add">now</span> come now to my attention that all can now not agree');
   });
 
+
+  it(" diff2 should mark up 1 'I think we all can agree', 'I think we can all agree'",
+      () => {
+    let td = new TextDiff();
+    let markup = td.diff2('I think we all can agree', 'I think we can all agree')
+    expect(markup).toEqual('I think we <span class="diffwow-add">can</span> all <span class="diffwow-remove">can</span> agree');
+  });
+  */
+  it(" diff2 should mark up 2 'I think we all can agree', 'I think we can all agree'",
+      () => {
+    let td = new TextDiff();
+    let markup = td.diff2('I think we all can agree', 'I think we can all agree')
+    expect(markup).toEqual('I think we <span class="diffwow-remove">all</span> can <span class="diffwow-add">all</span> agree');
+  });
 
 });

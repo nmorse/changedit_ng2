@@ -41,18 +41,35 @@ export class TextDiff {
       b = b.slice(1);
       return this.diff_aux(r, a, b);
     }
-    else if(this.is_found_in(b[0], a)) {
-      r.push({text:a[0], markup:"remove"});
-      a = a.slice(1);
-      //b = b.slice(1);
-      return this.diff_aux(r, a, b);
-    }
-    else if(this.is_found_in(a[0], b)) {
-      r.push({text:b[0], markup:"add"});
-      b = b.slice(1);
-      return this.diff_aux(r, a, b);
-    }
     else {
+      let b_in_a = this.is_found_in(b[0], a);
+      let a_in_b = this.is_found_in(a[0], b);
+      if (b_in_a > a_in_b) {
+        if(b_in_a) {
+          r.push({text:a[0], markup:"remove"});
+          a = a.slice(1);
+          //b = b.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+        else if(a_in_b) {
+          r.push({text:b[0], markup:"add"});
+          b = b.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+      }
+      else {
+        if(a_in_b) {
+          r.push({text:b[0], markup:"add"});
+          b = b.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+        else if(b_in_a) {
+          r.push({text:a[0], markup:"remove"});
+          a = a.slice(1);
+          //b = b.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+      }
       r.push({text:a[0], markup:"remove"});
       r.push({text:b[0], markup:"add"});
       a = a.slice(1);
@@ -61,17 +78,19 @@ export class TextDiff {
     }
   }
 
-  is_found_in(a: string, b_arr, distance:number = 8): boolean {
+  is_found_in(a: string, b_arr, stop_distance:number = 8): number {
+    let dist = 0;
     for(let b of b_arr) {
-      distance -= 1;
-      if (distance === 0) {
-        return false;
+      stop_distance -= 1;
+      dist += 1;
+      if (stop_distance === 0) {
+        return 0;
       }
       if (a == b) {
-        return true;
+        return dist;
       }
     }
-    return false;
+    return 0;
   }
 
   diffString( o, n ) {
