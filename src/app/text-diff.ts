@@ -45,25 +45,15 @@ export class TextDiff {
       let b_in_a = this.is_found_in(b[0], a);
       let a_in_b = this.is_found_in(a[0], b);
       if (b_in_a > a_in_b) {
-        if(b_in_a) {
-          r.push({text:a[0], markup:"remove"});
-          a = a.slice(1);
-          //b = b.slice(1);
-          return this.diff_aux(r, a, b);
-        }
-        else if(a_in_b) {
+        if (a_in_b) {
           r.push({text:b[0], markup:"add"});
           b = b.slice(1);
+          //b = b.slice(1);
           return this.diff_aux(r, a, b);
         }
       }
       else {
-        if(a_in_b) {
-          r.push({text:b[0], markup:"add"});
-          b = b.slice(1);
-          return this.diff_aux(r, a, b);
-        }
-        else if(b_in_a) {
+        if(b_in_a) {
           r.push({text:a[0], markup:"remove"});
           a = a.slice(1);
           //b = b.slice(1);
