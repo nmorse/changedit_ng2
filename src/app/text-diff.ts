@@ -44,27 +44,40 @@ export class TextDiff {
     else {
       let b_in_a = this.is_found_in(b[0], a);
       let a_in_b = this.is_found_in(a[0], b);
+      //console.log(a[0], a_in_b, b[0], b_in_a);
       if (b_in_a > a_in_b) {
         if (a_in_b) {
           r.push({text:b[0], markup:"add"});
           b = b.slice(1);
-          //b = b.slice(1);
+          //a = a.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+        else {
+          r.push({text:a[0], markup:"remove"});
+          a = a.slice(1);
           return this.diff_aux(r, a, b);
         }
       }
       else {
+//        if(a_in_b === b_in_a){
+//          r.push({text:a[0], markup:"remove"});
+//          r.push({text:b[0], markup:"add"});
+//          a = a.slice(1);
+//          b = b.slice(1);
+//          return this.diff_aux(r, a, b);
+//        }
+//        else 
         if(b_in_a) {
           r.push({text:a[0], markup:"remove"});
           a = a.slice(1);
-          //b = b.slice(1);
+          return this.diff_aux(r, a, b);
+        }
+        else {
+          r.push({text:b[0], markup:"add"});
+          b = b.slice(1);
           return this.diff_aux(r, a, b);
         }
       }
-      r.push({text:a[0], markup:"remove"});
-      r.push({text:b[0], markup:"add"});
-      a = a.slice(1);
-      b = b.slice(1);
-      return this.diff_aux(r, a, b);
     }
   }
 
@@ -72,13 +85,13 @@ export class TextDiff {
     let dist = 0;
     for(let b of b_arr) {
       stop_distance -= 1;
-      dist += 1;
       if (stop_distance === 0) {
         return 0;
       }
       if (a == b) {
         return dist;
       }
+      dist += 1;
     }
     return 0;
   }
