@@ -1,9 +1,9 @@
-:host >>> span.remove {
+:host >>> span.diffwow-remove {
     text-decoration: line-through;
     background-color: #FDE4E4;
 }
 
-:host >>> span.insert {
+:host >>> span.diffwow-add {
   text-decoration: underline;
   background-color: #E4FDE4;
 }

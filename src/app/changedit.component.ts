@@ -22,7 +22,7 @@ export class ChangeditAppComponent {
       {"states":{"Start":{},"clean":{},"editing":{},
         "changed":{
           onEnterState: function() {
-            return this.diff_display = this.diffEngine.diffString(this.original_content, this.changed_content);
+            return this.diff_display = this.diffEngine.diff2(this.original_content, this.changed_content);
           }
         },"to-be-removed":{}},
        "trans":{"Start":{"init":{"clean":true}},"clean":{"edit":{"editing":true},"remove":{"to-be-removed":true}},"editing":{"revert":{"clean":true},"accept":{"changed":true,"clean":function () { return (this.original_content == this.changed_content);}}},"changed":{"revert":{"clean":true},"edit":{"editing":true}},"to-be-removed":{"revert":{"clean":true}}},"current_state_name":"Start","views":[{"name":"primary","nodes":{}},{"name":"kitty corner","nodes":{"Start":{"position":{"x":300,"y":70},"width":60}}}]
